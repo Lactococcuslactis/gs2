@@ -230,6 +230,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "genshin-signin"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "env_logger",
+ "log",
+ "regex",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio",
+]
+
+[[package]]
 name = "getrandom"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -272,22 +288,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "322f4de77956e22ed0e5032c359a0f1273f1f7f0d79bfa3b8ffbc730d7fbcc5c"
 dependencies = [
  "libc",
-]
-
-[[package]]
-name = "hoyolab-signin"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "env_logger",
- "log",
- "regex",
- "reqwest",
- "serde",
- "serde_json",
- "thiserror",
- "tokio",
 ]
 
 [[package]]
