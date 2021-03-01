@@ -49,6 +49,7 @@ async fn main() {
         Ok(_) => (),
         Err(e) => {
             error!("sign-in failed: {}", e);
+            std::process::exit(-1);
         }
     }
 }
