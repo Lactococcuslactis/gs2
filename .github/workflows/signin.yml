@@ -1,0 +1,35 @@
+name: Daily Signin
+on:
+  schedule:
+    - cron: '0 4 * * *'
+
+jobs:
+  signin:
+    name: Perform Daily Sign-in
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install latest rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          override: true
+
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Run
+        env:
+          MHY_COOKIE: ${{ secrets.MHY_COOKIE }}
+        run: cargo run --release
