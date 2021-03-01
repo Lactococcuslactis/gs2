@@ -2,7 +2,7 @@ name: Daily Signin
 on:
   schedule:
     - cron: '0 4 * * *'
-  manual:
+  workflow_dispatch:
 
 jobs:
   signin:
