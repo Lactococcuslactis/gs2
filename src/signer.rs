@@ -1,3 +1,5 @@
+use std::env;
+
 use chrono::Datelike;
 use log::debug;
 use reqwest::{header, Client};
@@ -30,9 +32,10 @@ impl From<ApiResponseError> for SignInError {
 
 const REFERER: &str = "https://webstatic-sea.mihoyo.com/";
 fn get_page_url(action: &str, act_id: &str) -> String {
+    let lang = env::var("MHY_LANG").unwrap_or_else(|_| "en-us".to_string());
     format!(
-        "https://hk4e-api-os.mihoyo.com/event/sol/{}?lang=zh-cn&act_id={}",
-        action, act_id
+        "https://hk4e-api-os.mihoyo.com/event/sol/{}?lang={}&act_id={}",
+        action, lang, act_id
     )
 }
 
