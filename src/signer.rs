@@ -2,7 +2,7 @@ use std::env;
 
 use chrono::Datelike;
 use log::debug;
-use reqwest::{header, Client};
+use reqwest::{header, Client, RequestBuilder};
 
 use crate::api::{ApiResponse, ApiResponseError, Award, AwardList, SigninInfo, SigninResult};
 
@@ -39,12 +39,11 @@ fn get_page_url(action: &str, act_id: &str) -> String {
     )
 }
 
-async fn send_request<T>(client: &Client, endpoint: &str, cookie: &str) -> Result<T, SignInError>
+async fn send_request<T>(request: RequestBuilder, cookie: &str) -> Result<T, SignInError>
 where
     T: serde::de::DeserializeOwned,
 {
-    Ok(client
-        .get(endpoint)
+    Ok(request
         .header(header::REFERER, header::HeaderValue::from_static(REFERER))
         .header(header::COOKIE, header::HeaderValue::from_str(cookie)?)
         .send()
@@ -62,7 +61,7 @@ pub(crate) async fn signin(
     debug!("received sign-in request");
 
     // pull the sign-in info
-    let info: SigninInfo = send_request(client, &get_page_url("info", act_id), cookie).await?;
+    let info: SigninInfo = send_request(client.get(&get_page_url("info", act_id)), cookie).await?;
     debug!("sign-in info: {:?}", info);
     if info.is_sign {
         debug!("abort signing-in, user already signed-in");
@@ -70,11 +69,12 @@ pub(crate) async fn signin(
     }
 
     // pull the award list
-    let award_list: AwardList = send_request(client, &get_page_url("home", act_id), cookie).await?;
+    let award_list: AwardList =
+        send_request(client.get(&get_page_url("home", act_id)), cookie).await?;
     debug!("award list: {:?}", award_list);
 
     // sign in
-    send_request::<SigninResult>(client, &get_page_url("sign", act_id), cookie).await?;
+    send_request::<SigninResult>(client.post(&get_page_url("sign", act_id)), cookie).await?;
     debug!("signed in");
 
     let today = info.today.day0() as usize;
