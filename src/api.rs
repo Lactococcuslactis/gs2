@@ -38,6 +38,25 @@ pub(crate) struct SigninResult {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+pub(crate) struct HoyolabGameTool {
+    pub(crate) id: i32,
+    pub(crate) name: String,
+    pub(crate) web_path: String,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub(crate) struct HoyolabGame {
+    pub(crate) game_id: i32,
+    pub(crate) game_name: String,
+    pub(crate) tools: Vec<HoyolabGameTool>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub(crate) struct HoyolabGameList {
+    pub(crate) games: Vec<HoyolabGame>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
 pub(crate) struct ApiResponse<T> {
     pub(crate) retcode: i32,
     pub(crate) message: String,
